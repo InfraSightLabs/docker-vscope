@@ -1,4 +1,15 @@
-vScope Server Docker image
+vScope
 =============
 
-This is Docker build files to create Docker image for vScope Server running in Ubuntu container.
+vScope by InfraSight Labs is a software that helps optimizing IT infrastructures.
+
+More information about vScope and what it can do can be found here: http://infrasightlabs.com/products/vscope
+
+
+Setup
+-----
+
+  - Execute command: `docker run --name vscope -d infrasight/vscope`
+  - Aim your browser at http://localhost to access vScope web UI
+
+
