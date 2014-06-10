@@ -4,8 +4,8 @@
 FROM ubuntu
 MAINTAINER Konrad Eriksson "konrad.eriksson@infrasightlabs.com"
 
-#RUN apt-get update
-#RUN apt-get -y dist-upgrade
+RUN apt-get update
+RUN apt-get -y upgrade
 
 # Install wget to enable fetching signing key
 RUN apt-get -y install wget
