@@ -3,7 +3,7 @@ vScope
 
 vScope by InfraSight Labs is a software that helps optimizing IT infrastructures.
 
-More information about vScope and what it can do can be found here: http://infrasightlabs.com/products/vscope
+More information about vScope: https://infrasightlabs.com/vscope
 
 
 Setup
