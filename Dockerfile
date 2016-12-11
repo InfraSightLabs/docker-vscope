@@ -1,7 +1,7 @@
 # vScope Server - Release version
 #
 
-FROM ubuntu
+FROM ubuntu:16.04
 MAINTAINER Konrad Eriksson "konrad.eriksson@infrasightlabs.com"
 
 RUN apt-get update
@@ -11,10 +11,10 @@ RUN apt-get -y upgrade
 RUN apt-get -y install wget
 
 # Install vScope signing key
-RUN wget -O - http://debian.vscope.net/infrasightlabs.com.gpg.key | apt-key add -
+RUN wget -O - http://vscope.net/debian/infrasightlabs.com.gpg.key | apt-key add -
 
 # Add vScope repo as APT sources.list file
-RUN echo 'deb http://debian.vscope.net release main' > /etc/apt/sources.list.d/vscope.list
+RUN echo 'deb http://vscope.net/debian release main' > /etc/apt/sources.list.d/vscope.list
 
 # Fetch files in newly added repo
 RUN apt-get update
