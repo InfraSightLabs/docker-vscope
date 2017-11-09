@@ -4,23 +4,20 @@
 FROM ubuntu:16.04
 MAINTAINER Konrad Eriksson "konrad.eriksson@infrasightlabs.com"
 
-RUN apt-get update
-RUN apt-get -y upgrade
+RUN apt update
 
 # Install wget to enable fetching signing key
-RUN apt-get -y install wget
+RUN apt -y install wget unzip openjdk-8-jre-headless
 
-# Install vScope signing key
-RUN wget -O - http://vscope.net/debian/infrasightlabs.com.gpg.key | apt-key add -
+ADD http://vscope.net/dist/release/latest-server-linux.php /vscope.zip
 
-# Add vScope repo as APT sources.list file
-RUN echo 'deb http://vscope.net/debian release main' > /etc/apt/sources.list.d/vscope.list
+RUN unzip /vscope.zip -d /opt &&\
+    rm /vscope.zip
 
-# Fetch files in newly added repo
-RUN apt-get update
+RUN sed -i '/MaxPermSize/d' /opt/vScopeServer/vScopeServer.ini
 
-# Install vScope Server package (requires headless JVM that also gets installed)
-RUN apt-get -y install vscopeserver
+RUN sed -i 's|osgi.instance.area.*|osgi.instance.area=/data|g' /opt/vScopeServer/configuration/config.ini
+RUN sed -i 's|osgi.configuration.area.*|osgi.configuration.area=/data/configuration|g' /opt/vScopeServer/configuration/config.ini
 
 # vScope Web UI port
 EXPOSE 80
@@ -29,4 +26,5 @@ EXPOSE 80
 EXPOSE 4444
 
 ## Entrypoint
-ENTRYPOINT ["/var/lib/vscopeserver/vscopeserver"]
+# ENTRYPOINT ["/var/lib/vscopeserver/vscopeserver"]
+ENTRYPOINT ["/opt/vScopeServer/vScopeServer"]
