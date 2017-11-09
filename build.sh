@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker build --no-cache=true -t infrasight/vscope .
+docker build -t infrasight/vscope .
