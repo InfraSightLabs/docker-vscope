@@ -1,23 +1,21 @@
-# vScope Server - Release version
-#
-
-FROM ubuntu:16.04
-MAINTAINER Konrad Eriksson "konrad.eriksson@infrasightlabs.com"
-
-RUN apt update
-
-# Install wget to enable fetching signing key
-RUN apt -y install wget unzip openjdk-8-jre-headless
+FROM alpine:latest as downloader
 
 ADD http://vscope.net/dist/release/latest-server-linux.php /vscope.zip
 
-RUN unzip /vscope.zip -d /opt &&\
-    rm /vscope.zip
+RUN unzip /vscope.zip -d /tmp
 
-RUN sed -i '/MaxPermSize/d' /opt/vScopeServer/vScopeServer.ini
+RUN rm /tmp/vScopeServer/vScopeServer.ini
 
-RUN sed -i 's|osgi.instance.area.*|osgi.instance.area=/data|g' /opt/vScopeServer/configuration/config.ini
-RUN sed -i 's|osgi.configuration.area.*|osgi.configuration.area=/data/configuration|g' /opt/vScopeServer/configuration/config.ini
+RUN cp /tmp/vScopeServer/plugins/com.infrasight.bootstrap_*.jar /tmp/vScopeServer/bootstrap.jar
+
+RUN sed -i 's|osgi.instance.area.*|osgi.instance.area=/data|g' /tmp/vScopeServer/configuration/config.ini
+RUN sed -i 's|osgi.configuration.area.*|osgi.configuration.area=/data/configuration|g' /tmp/vScopeServer/configuration/config.ini
+
+
+FROM openjdk:8-jre-alpine
+MAINTAINER Konrad Eriksson "konrad.eriksson@infrasightlabs.com"
+
+COPY --from=downloader /tmp/ /
 
 # vScope Web UI port
 EXPOSE 80
@@ -26,5 +24,4 @@ EXPOSE 80
 EXPOSE 4444
 
 ## Entrypoint
-# ENTRYPOINT ["/var/lib/vscopeserver/vscopeserver"]
-ENTRYPOINT ["/opt/vScopeServer/vScopeServer"]
+ENTRYPOINT ["/usr/bin/java", "-cp", "/vScopeServer/bootstrap.jar", "com.infrasight.bootstrap.Bootstrapper", "-install", "/vScopeServer"]
