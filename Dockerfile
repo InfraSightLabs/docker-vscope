@@ -1,6 +1,6 @@
 FROM alpine:latest as downloader
 
-ADD http://vscope.net/dist/release/latest-server-linux.php /vscope.zip
+ADD https://dist.vscope.net/server/release/latest-linux64.gtk.zip /vscope.zip
 
 RUN unzip /vscope.zip -d /tmp
 
